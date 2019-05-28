@@ -1,4 +1,5 @@
 #include "drawer.hpp"
+#include <iostream>
 #include "appsettings.hpp"
 
 Drawer::Drawer() {}
@@ -10,11 +11,10 @@ void Drawer::draw(const Level& level, QGLWidget& qglWidget) {
 }
 
 void Drawer::drawGrid(const Level& level, QGLWidget& qglWidget) {
-
     /**
      * Drawing grid
      *
-    **/
+     **/
     //    int iNumOfRows = level.rows();
     //    int iNumOfColumns = level.columns();
 
@@ -35,37 +35,36 @@ void Drawer::drawGrid(const Level& level, QGLWidget& qglWidget) {
     //    }
     //    glEnd();
 
-
-
     /**
      * Drawing floor on the whole map
      *
-    **/
-//    int iNumOfRows = level.rows();
-//    int iNumOfColumns = level.columns();
+     **/
+    //    int iNumOfRows = level.rows();
+    //    int iNumOfColumns = level.columns();
 
-//    const Map& map = level.map();
+    //    const Map& map = level.map();
 
-//    float fTileWidth = map.tileWidth();
-//    float fTileHeight = map.tileHeight();
+    //    float fTileWidth = map.tileWidth();
+    //    float fTileHeight = map.tileHeight();
 
-//    auto pSettings = &AppSettings::instance();
+    //    auto pSettings = &AppSettings::instance();
 
-//    unsigned uFloorSpriteId =
-//        pSettings->getTextureId(AppSettings::eTexture::FLOOR);
+    //    unsigned uFloorSpriteId =
+    //        pSettings->getTextureId(AppSettings::eTexture::FLOOR);
 
-//    const auto vecMap = level.map().mapAsTiles();
+    //    const auto vecMap = level.map().mapAsTiles();
 
-//    glEnable(GL_TEXTURE_2D);
-//    for (int iCurRow = 0; iCurRow < iNumOfRows; ++iCurRow) {
-//        for (int iCurCol = 0; iCurCol < iNumOfColumns; ++iCurCol) {
-//            qglWidget.drawTexture(
-//                QRectF(map.getTileLeftX(iCurCol), map.getTileUpperY(iCurRow),
-//                       fTileWidth, fTileHeight),
-//                uFloorSpriteId);
-//        }
-//    }
-//    glDisable(GL_TEXTURE_2D);
+    //    glEnable(GL_TEXTURE_2D);
+    //    for (int iCurRow = 0; iCurRow < iNumOfRows; ++iCurRow) {
+    //        for (int iCurCol = 0; iCurCol < iNumOfColumns; ++iCurCol) {
+    //            qglWidget.drawTexture(
+    //                QRectF(map.getTileLeftX(iCurCol),
+    //                map.getTileUpperY(iCurRow),
+    //                       fTileWidth, fTileHeight),
+    //                uFloorSpriteId);
+    //        }
+    //    }
+    //    glDisable(GL_TEXTURE_2D);
 }
 
 void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
@@ -73,6 +72,7 @@ void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
     int iNumOfColumns = level.columns();
 
     const Map& map = level.map();
+    std::cout << "Drawer: " << &map << std::endl;
 
     float fTileWidth = map.tileWidth();
     float fTileHeight = map.tileHeight();
@@ -122,9 +122,7 @@ void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
                     //                    uSpriteId = uFloorSpriteId;
                     break;
                 }
-                default: {
-                    break;
-                }
+                default: { break; }
             }
             if (uSpriteId != 0) {
                 qglWidget.drawTexture(

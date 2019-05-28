@@ -38,11 +38,20 @@ void Level::playerUp() {
     mover.movePlayerUp();
 }
 
-void Level::playerDown() {}
+void Level::playerDown() {
+    Mover mover(&map_);
+    mover.movePlayerDown();
+}
 
-void Level::playerLeft() {}
+void Level::playerLeft() {
+    Mover mover(&map_);
+    mover.movePlayerLeft();
+}
 
-void Level::playerRight() {}
+void Level::playerRight() {
+    Mover mover(&map_);
+    mover.movePlayerRight();
+}
 
 int Level::stepsPerformed() const { return iStepsPerformed_; }
 

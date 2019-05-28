@@ -243,17 +243,26 @@ void Socoban::keyHandlerPlayerStatMenu(int iKey) {
 
 void Socoban::keyHandlerPlay(int iKey) {
     switch (iKey) {
-        case Qt::Key_Down:
+        case Qt::Key_Down: {
+            Level& curLevel = selectLevelMenu_->curLevel();
+            curLevel.playerDown();
             break;
+        }
         case Qt::Key_Up: {
-            auto curLevel = selectLevelMenu_->curLevel();
+            Level& curLevel = selectLevelMenu_->curLevel();
             curLevel.playerUp();
             break;
         }
-        case Qt::Key_Left:
+        case Qt::Key_Left: {
+            Level& curLevel = selectLevelMenu_->curLevel();
+            curLevel.playerLeft();
             break;
-        case Qt::Key_Right:
+        }
+        case Qt::Key_Right: {
+            Level& curLevel = selectLevelMenu_->curLevel();
+            curLevel.playerRight();
             break;
+        }
         case Qt::Key_R:
             break;
         case Qt::Key_Enter:

@@ -78,6 +78,7 @@ int Map::playerX() const { return iPlayerX_; }
 int Map::playerY() const { return iPlayerY_; }
 
 void Map::buildMap() {
+    vecMap_.clear();
     for (int iCurRow = 0; iCurRow < iMapRows_; ++iCurRow) {
         for (int iCurColumn = 0; iCurColumn < iMapColumns_; ++iCurColumn) {
             char cTile = sMap_[iCurRow * iMapColumns_ + iCurColumn];
@@ -86,10 +87,6 @@ void Map::buildMap() {
             if (cTile == '@') {
                 iPlayerX_ = iCurColumn;
                 iPlayerY_ = iCurRow;
-
-                //                std::cout << playerX() << " and " << playerY()
-                //                << " " << this
-                //                          << std::endl;
             }
         }
     }

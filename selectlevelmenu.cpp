@@ -1,7 +1,7 @@
 #include "selectlevelmenu.hpp"
 #include "map.hpp"
 
-SelectLevelMenu::SelectLevelMenu(const std::vector<Level>* pVecLevels) {
+SelectLevelMenu::SelectLevelMenu(std::vector<Level>* pVecLevels) {
     iCurItem_ = 0;
     iMinDisplayedItem_ = 0;
     iMaxDisplayedItem_ = 5;
@@ -11,7 +11,10 @@ SelectLevelMenu::SelectLevelMenu(const std::vector<Level>* pVecLevels) {
 
 int SelectLevelMenu::curItem() const { return iCurItem_; }
 
-Level SelectLevelMenu::curLevel() const { return (*pVecLevels_)[curItem()]; }
+Level& SelectLevelMenu::curLevel() {
+    int iId = curItem();
+    return pVecLevels_->operator[](iId);
+}
 
 void SelectLevelMenu::nextItem() {
     if (iCurItem_ != (static_cast<int>(pVecLevels_->size() - 1))) {
