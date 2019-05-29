@@ -2,7 +2,8 @@
 #include <iostream>
 #include "appsettings.hpp"
 
-Map::Map(std::string sMap, int iNumOfColumns, int iNumOfRows) {
+Map::Map(std::string sMap, int iNumOfColumns, int iNumOfRows)
+    : iBoxesOnGoals(0), iGoals(0) {
     iMapColumns_ = iNumOfColumns;
     iMapRows_ = iNumOfRows;
 
@@ -35,10 +36,9 @@ Map::Map(std::string sMap, int iNumOfColumns, int iNumOfRows) {
     fFirstTileY_ = iScreenHeight / 10.f;
 
     sMap_ = sMap;
+    sInitialMap_ = sMap_;
 
     buildMap();
-
-    std::cout << playerX() << " and " << playerY() << " " << this << std::endl;
 }
 
 std::vector<Map::eTile> Map::mapAsTiles() const { return vecMap_; }
@@ -88,6 +88,12 @@ void Map::buildMap() {
                 iPlayerX_ = iCurColumn;
                 iPlayerY_ = iCurRow;
             }
+            if (cTile == '*') {
+                ++iBoxesOnGoals;
+            }
+            if (cTile == '.') {
+                ++iGoals;
+            }
         }
     }
 }
@@ -128,3 +134,12 @@ Map::eTile Map::charToTile(char cTile) {
     }
     return tile;
 }
+
+void Map::ResetMap() {
+    sMap_ = sInitialMap_;
+    buildMap();
+}
+
+int Map::goals() const { return iGoals; }
+
+int Map::boxesOnGoals() const { return iBoxesOnGoals; }

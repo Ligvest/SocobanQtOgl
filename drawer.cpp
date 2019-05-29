@@ -72,7 +72,6 @@ void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
     int iNumOfColumns = level.columns();
 
     const Map& map = level.map();
-    std::cout << "Drawer: " << &map << std::endl;
 
     float fTileWidth = map.tileWidth();
     float fTileHeight = map.tileHeight();

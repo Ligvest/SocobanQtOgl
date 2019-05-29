@@ -263,8 +263,11 @@ void Socoban::keyHandlerPlay(int iKey) {
             curLevel.playerRight();
             break;
         }
-        case Qt::Key_R:
+        case Qt::Key_R: {
+            Level& curLevel = selectLevelMenu_->curLevel();
+            curLevel.resetLevel();
             break;
+        }
         case Qt::Key_Enter:
         case Qt::Key_Return:
             break;

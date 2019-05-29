@@ -16,7 +16,6 @@ class Level {
     const Map& map() const;
 
     // Control functions
-    void reset();
     void load(int iLevelNumber);
     void load(std::string sFileWithSave);
     bool isComplete() const;
@@ -30,6 +29,7 @@ class Level {
     int stepsPerformed() const;
     int goals() const;
     int boxesOnGoals() const;
+    void resetLevel();
 
    private:
     int iNumOfColumns_;

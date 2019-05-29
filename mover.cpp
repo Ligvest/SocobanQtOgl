@@ -6,7 +6,6 @@ Mover::Mover() {}
 Mover::Mover(Map* map) {
     map_ = map;
     sMap_ = map_->mapAsString();
-    std::cout << "Mover:  " << map << std::endl;
 }
 
 bool Mover::setTile(Point pos, Map::eTile tileToSet) {

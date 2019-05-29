@@ -70,6 +70,10 @@ class Map {
 
     int mapColumns() const;
     int mapRows() const;
+    void ResetMap();
+
+    int goals() const;
+    int boxesOnGoals() const;
 
    private:
     int iMapColumns_;
@@ -84,7 +88,11 @@ class Map {
     float fFirstTileX_;
     float fFirstTileY_;
 
+    int iBoxesOnGoals;
+    int iGoals;
+
     std::string sMap_;
+    std::string sInitialMap_;
     std::vector<eTile> vecMap_;
     Map::eTile charToTile(char cTile);
 };

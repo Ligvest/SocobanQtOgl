@@ -6,15 +6,14 @@
 #include "socoban.hpp"
 
 int main(int argc, char* argv[]) {
-  QApplication a(argc, argv);
+    QApplication a(argc, argv);
 
-  AppSettings::instance();
+    AppSettings::instance();
 
-  Socoban app;
-  app.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
-  app.setFixedSize(800, 600);
-  app.show();
+    Socoban app;
+    app.setSizePolicy(QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed));
+    app.setFixedSize(800, 600);
+    app.show();
 
-  return a.exec();
-  return 0;
+    return a.exec();
 }

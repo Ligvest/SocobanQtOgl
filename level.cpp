@@ -8,8 +8,8 @@ Level::Level(int iWidth, int iHeight, std::string sName, std::string sMap)
     sName_ = sName;
 
     iStepsPerformed_ = 0;
-    iGoals_ = std::count(sMap.begin(), sMap.end(), '.');
-    iBoxesOnGoals_ = 0;
+    iGoals_ = map_.goals();
+    iBoxesOnGoals_ = map_.boxesOnGoals();
     isComplete_ = false;
 }
 
@@ -23,7 +23,7 @@ std::string Level::name() const { return sName_; }
 
 const Map& Level::map() const { return map_; }
 
-void Level::reset() {}
+void Level::resetLevel() { map_.ResetMap(); }
 
 void Level::load(int iLevelNumber) {}
 
