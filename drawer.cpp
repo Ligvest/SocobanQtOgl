@@ -86,6 +86,8 @@ void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
         pSettings->getTextureId(AppSettings::eTexture::GOAL);
     unsigned uPlayerSpriteId =
         pSettings->getTextureId(AppSettings::eTexture::PLAYER);
+    unsigned uPlayerOnAGoalSpriteId =
+        pSettings->getTextureId(AppSettings::eTexture::PLAYER_ON_A_GOAL);
     unsigned uWallSpriteId =
         pSettings->getTextureId(AppSettings::eTexture::WALL);
     //    unsigned uFloorSpriteId =
@@ -112,6 +114,10 @@ void Drawer::drawObjects(const Level& level, QGLWidget& qglWidget) {
                 }
                 case Map::eTile::PLAYER: {
                     uSpriteId = uPlayerSpriteId;
+                    break;
+                }
+                case Map::eTile::PLAYER_ON_GOAL: {
+                    uSpriteId = uPlayerOnAGoalSpriteId;
                     break;
                 }
                 case Map::eTile::WALL: {

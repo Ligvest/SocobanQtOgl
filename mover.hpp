@@ -9,25 +9,31 @@ class Mover {
 
    public:
     Mover(Map* map);
+
+    // Move the player
     bool movePlayerUp();
     bool movePlayerDown();
     bool movePlayerRight();
     bool movePlayerLeft();
-    Map::eTile getTile(Point posTile);
 
    private:
     Mover();
-    bool isObjectStatic(int iTileRow, int iTileColumn);
     bool swapObjects(Point posFirstObj, Point posSecondObj);
-    bool moveBoxUp(Point posBox);
-    bool moveBoxDown(Point posBox);
-    bool moveBoxRight(Point posBox);
-    bool moveBoxLeft(Point posBox);
-    bool moveBoxFromTo(Point posFrom, Point posTo);
-    bool movePlayerFromTo(Point posFrom, Point posTo);
-    bool mergeObjects(Point posFrom, Point posTo);
     bool setTile(Point pos, Map::eTile tileToSet);
     char tileToChar(Map::eTile tileToConvert);
+    Map::eTile getTile(Point posTile);
+
+    // Move a box
+    bool moveBoxFromTo(Point posFrom, Point posTo);
+    bool moveBoxFromFloor(Point posFrom, Point posTo);
+    bool moveBoxFromGoal(Point posFrom, Point posTo);
+    bool mergeBox(Point posFrom, Point posTo);
+
+    // Move the player
+    bool movePlayerFromTo(Point posFrom, Point posTo);
+    bool movePlayerFromFloor(Point posFrom, Point posTo);
+    bool movePlayerFromGoal(Point posFrom, Point posTo);
+    bool mergePlayer(Point posFrom, Point posTo);
 
    private:
     Map* map_;

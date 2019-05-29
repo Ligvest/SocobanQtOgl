@@ -10,6 +10,7 @@ class AppSettings {
    public:
     enum class eTexture {
         PLAYER = 0,
+        PLAYER_ON_A_GOAL,
         WALL,
         BOX,
         BOX_ON_A_GOAL,

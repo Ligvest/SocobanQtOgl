@@ -84,7 +84,7 @@ void Map::buildMap() {
             char cTile = sMap_[iCurRow * iMapColumns_ + iCurColumn];
             vecMap_.push_back(charToTile(cTile));
 
-            if (cTile == '@') {
+            if (cTile == '@' || cTile == '+') {
                 iPlayerX_ = iCurColumn;
                 iPlayerY_ = iCurRow;
             }

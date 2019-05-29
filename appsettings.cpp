@@ -82,6 +82,8 @@ void AppSettings::loadTextures(std::string sPathToTextures) {
         loadTexture(sPathToTextures + "floor.png");
     piTextureIds_[static_cast<unsigned int>(eTexture::WALL)] =
         loadTexture(sPathToTextures + "wall.png");
+    piTextureIds_[static_cast<unsigned int>(eTexture::PLAYER_ON_A_GOAL)] =
+        loadTexture(sPathToTextures + "playeronagoal.png");
 
     glDisable(GL_TEXTURE_2D);
 }

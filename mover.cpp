@@ -18,67 +18,104 @@ bool Mover::setTile(Point pos, Map::eTile tileToSet) {
     sMap_[pos.y() * map_->mapColumns() + pos.x()] = tileToChar(tileToSet);
 }
 
-bool Mover::mergeObjects(Point posFrom, Point posTo) {
-    if (getTile(posFrom) == Map::eTile::BOX &&
-        getTile(posTo) == Map::eTile::GOAL) {
+// Move boxes
+bool Mover::mergeBox(Point posFrom, Point posTo) {
+    Map::eTile tileFrom = getTile(posFrom);
+
+    if (tileFrom == Map::eTile::BOX_ON_GOAL) {
+        setTile(posFrom, Map::eTile::GOAL);
+        setTile(posTo, Map::eTile::BOX_ON_GOAL);
+    } else if (tileFrom == Map::eTile::BOX) {
         setTile(posFrom, Map::eTile::FLOOR);
         setTile(posTo, Map::eTile::BOX_ON_GOAL);
+    }
+    return true;
+}
+
+bool Mover::moveBoxFromFloor(Point posFrom, Point posTo) {
+    Map::eTile tileTo = getTile(posTo);
+    if (tileTo == Map::eTile::FLOOR) {
+        swapObjects(posFrom, posTo);
         return true;
-    } else if (getTile(posFrom) == Map::eTile::PLAYER &&
-               getTile(posTo) == Map::eTile::GOAL) {
-        setTile(posFrom, Map::eTile::FLOOR);
-        setTile(posTo, Map::eTile::PLAYER_ON_GOAL);
+    } else if (tileTo == Map::eTile::GOAL) {
+        mergeBox(posFrom, posTo);
         return true;
     } else {
+        return false;
+    }
+}
+
+bool Mover::moveBoxFromGoal(Point posFrom, Point posTo) {
+    setTile(posFrom, Map::eTile::BOX);
+    if (moveBoxFromFloor(posFrom, posTo)) {
+        setTile(posFrom, Map::eTile::GOAL);
+        return true;
+    } else {
+        setTile(posFrom, Map::eTile::BOX_ON_GOAL);
         return false;
     }
 }
 
 bool Mover::moveBoxFromTo(Point posFrom, Point posTo) {
-    if (getTile(posTo) == Map::eTile::FLOOR) {
-        swapObjects(posFrom, posTo);
-        return true;
-    } else if (getTile(posTo) == Map::eTile::GOAL) {
-        mergeObjects(posFrom, posTo);
-        return true;
+    Map::eTile tileFrom = getTile(posFrom);
+    if (tileFrom == Map::eTile::BOX) {
+        return moveBoxFromFloor(posFrom, posTo);
+    } else if (tileFrom == Map::eTile::BOX_ON_GOAL) {
+        return moveBoxFromGoal(posFrom, posTo);
+    }
+}
+// <! Move boxes
+
+// Move player
+bool Mover::mergePlayer(Point posFrom, Point posTo) {
+    setTile(posFrom, Map::eTile::FLOOR);
+    setTile(posTo, Map::eTile::PLAYER_ON_GOAL);
+    return true;
+}
+
+bool Mover::movePlayerFromFloor(Point posFrom, Point posTo) {
+    Map::eTile tileTo = getTile(posTo);
+    Point posDirection = posTo - posFrom;
+    Point posAfterPosTo = posTo + posDirection;
+
+    if (tileTo == Map::eTile::FLOOR) {
+        return swapObjects(posFrom, posTo);
+    } else if (tileTo == Map::eTile::BOX) {
+        if (moveBoxFromTo(posTo, posAfterPosTo)) {
+            return swapObjects(posFrom, posTo);
+        } else {
+            return false;
+        }
+    } else if (tileTo == Map::eTile::BOX_ON_GOAL) {
+        if (moveBoxFromTo(posTo, posAfterPosTo)) {
+            return mergePlayer(posFrom, posTo);
+        } else {
+            return false;
+        }
+    } else if (tileTo == Map::eTile::GOAL) {
+        return mergePlayer(posFrom, posTo);
     } else {
         return false;
     }
 }
-bool Mover::moveBoxUp(Point posBox) {
-    Point posAboveBox(posBox.x(), posBox.y() - 1);
-    moveBoxFromTo(posBox, posAboveBox);
-}
 
-bool Mover::moveBoxDown(Point posBox) {
-    Point posUnderBox(posBox.x(), posBox.y() + 1);
-    moveBoxFromTo(posBox, posUnderBox);
-}
-
-bool Mover::moveBoxRight(Point posBox) {
-    Point posRightFromBox(posBox.x() + 1, posBox.y());
-    moveBoxFromTo(posBox, posRightFromBox);
-}
-
-bool Mover::moveBoxLeft(Point posBox) {
-    Point posLeftFromBox(posBox.x() - 1, posBox.y());
-    moveBoxFromTo(posBox, posLeftFromBox);
+bool Mover::movePlayerFromGoal(Point posFrom, Point posTo) {
+    setTile(posFrom, Map::eTile::PLAYER);
+    if (movePlayerFromFloor(posFrom, posTo)) {
+        setTile(posFrom, Map::eTile::GOAL);
+        return true;
+    } else {
+        setTile(posFrom, Map::eTile::PLAYER_ON_GOAL);
+        return false;
+    }
 }
 
 bool Mover::movePlayerFromTo(Point posFrom, Point posTo) {
-    Map::eTile tileTo = getTile(posTo);
-    Point posDirection = posTo - posFrom;
-    Point posAfterPosTo = posTo + posDirection;
-    if (tileTo == Map::eTile::BOX || tileTo == Map::eTile::BOX_ON_GOAL) {
-        if (moveBoxFromTo(posTo, posAfterPosTo)) {
-            swapObjects(posFrom, posTo);
-        } else {
-            return false;
-        }
-    } else if (tileTo == Map::eTile::FLOOR) {
-        swapObjects(posFrom, posTo);
-    } else {
-        return false;
+    Map::eTile tileFrom = getTile(posFrom);
+    if (tileFrom == Map::eTile::PLAYER_ON_GOAL) {
+        movePlayerFromGoal(posFrom, posTo);
+    } else if (tileFrom == Map::eTile::PLAYER) {
+        movePlayerFromFloor(posFrom, posTo);
     }
 
     map_->setMapString(sMap_);
@@ -95,20 +132,21 @@ bool Mover::movePlayerUp() {
 bool Mover::movePlayerDown() {
     Point posPlayer(map_->playerX(), map_->playerY());
     Point posUnderPlayer(posPlayer.x(), posPlayer.y() + 1);
-    movePlayerFromTo(posPlayer, posUnderPlayer);
+    return movePlayerFromTo(posPlayer, posUnderPlayer);
 }
 
 bool Mover::movePlayerRight() {
     Point posPlayer(map_->playerX(), map_->playerY());
     Point posRightFromPlayer(posPlayer.x() + 1, posPlayer.y());
-    movePlayerFromTo(posPlayer, posRightFromPlayer);
+    return movePlayerFromTo(posPlayer, posRightFromPlayer);
 }
 
 bool Mover::movePlayerLeft() {
     Point posPlayer(map_->playerX(), map_->playerY());
     Point posLeftFromPlayer(posPlayer.x() - 1, posPlayer.y());
-    movePlayerFromTo(posPlayer, posLeftFromPlayer);
+    return movePlayerFromTo(posPlayer, posLeftFromPlayer);
 }
+//<! Move player
 
 Map::eTile Mover::getTile(Point posTile) {
     int iTileRow = posTile.y();
@@ -177,23 +215,6 @@ char Mover::tileToChar(Map::eTile tileToConvert) {
             break;
     }
     return cTile;
-}
-
-bool Mover::isObjectStatic(int iTileRow, int iTileColumn) {
-    switch (sMap_[iTileRow * map_->mapColumns() + iTileColumn]) {
-        case '#':  // wall
-        case '.':  // goal
-        case ' ':  // floor
-            return true;
-        case '@':  // player
-        case '+':  // player on a goal
-        case '$':  // box
-        case '*':  // box on a goal
-            return false;
-        default:
-            return true;
-            break;
-    }
 }
 
 bool Mover::swapObjects(Point posFirstObj, Point posSecondObj) {
