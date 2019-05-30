@@ -25,8 +25,9 @@ std::string Level::name() const { return sName_; }
 const Map& Level::map() const { return map_; }
 
 void Level::resetLevel() {
-    iStepsPerformed_ = 0;
     map_.ResetMap();
+    iStepsPerformed_ = 0;
+    iBoxesOnGoals_ = map_.boxesOnGoals();
 }
 
 void Level::load(int iLevelNumber) {}

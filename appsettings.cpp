@@ -10,7 +10,10 @@ AppSettings::AppSettings()
                                          AppSettings::eTexture::END) -
                                      1]) {}
 
-AppSettings::~AppSettings() { save(); }
+AppSettings::~AppSettings() {
+    delete[] piTextureIds_;
+    save();
+}
 
 AppSettings& AppSettings::instance() {
     static AppSettings settings;
