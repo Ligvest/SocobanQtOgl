@@ -1,5 +1,6 @@
 #include "level.hpp"
 #include <algorithm>
+#include "movercountdecorator.hpp"
 
 Level::Level(int iWidth, int iHeight, std::string sName, std::string sMap)
     : map_(sMap, iWidth, iHeight), playerPosition_(Point(0, 0)) {
@@ -23,7 +24,10 @@ std::string Level::name() const { return sName_; }
 
 const Map& Level::map() const { return map_; }
 
-void Level::resetLevel() { map_.ResetMap(); }
+void Level::resetLevel() {
+    iStepsPerformed_ = 0;
+    map_.ResetMap();
+}
 
 void Level::load(int iLevelNumber) {}
 
@@ -35,22 +39,30 @@ bool Level::isLoaded() const {}
 
 void Level::playerUp() {
     Mover mover(&map_);
-    mover.movePlayerUp();
+    MoverCountDecorator moverCount(&mover);
+    moverCount.movePlayerUp(iStepsPerformed_);
+    iBoxesOnGoals_ = map_.boxesOnGoals();
 }
 
 void Level::playerDown() {
     Mover mover(&map_);
-    mover.movePlayerDown();
+    MoverCountDecorator moverCount(&mover);
+    moverCount.movePlayerDown(iStepsPerformed_);
+    iBoxesOnGoals_ = map_.boxesOnGoals();
 }
 
 void Level::playerLeft() {
     Mover mover(&map_);
-    mover.movePlayerLeft();
+    MoverCountDecorator moverCount(&mover);
+    moverCount.movePlayerLeft(iStepsPerformed_);
+    iBoxesOnGoals_ = map_.boxesOnGoals();
 }
 
 void Level::playerRight() {
     Mover mover(&map_);
-    mover.movePlayerRight();
+    MoverCountDecorator moverCount(&mover);
+    moverCount.movePlayerRight(iStepsPerformed_);
+    iBoxesOnGoals_ = map_.boxesOnGoals();
 }
 
 int Level::stepsPerformed() const { return iStepsPerformed_; }

@@ -3,7 +3,7 @@
 #include "appsettings.hpp"
 
 Map::Map(std::string sMap, int iNumOfColumns, int iNumOfRows)
-    : iBoxesOnGoals(0), iGoals(0) {
+    : iBoxesOnGoals_(0), iGoals_(0) {
     iMapColumns_ = iNumOfColumns;
     iMapRows_ = iNumOfRows;
 
@@ -37,6 +37,10 @@ Map::Map(std::string sMap, int iNumOfColumns, int iNumOfRows)
 
     sMap_ = sMap;
     sInitialMap_ = sMap_;
+    iGoals_ = std::count_if(
+        sInitialMap_.begin(), sInitialMap_.end(), [](char cValue) {
+            return cValue == '.' || cValue == '*' ? true : false;
+        });
 
     buildMap();
 }
@@ -78,6 +82,7 @@ int Map::playerX() const { return iPlayerX_; }
 int Map::playerY() const { return iPlayerY_; }
 
 void Map::buildMap() {
+    iBoxesOnGoals_ = 0;
     vecMap_.clear();
     for (int iCurRow = 0; iCurRow < iMapRows_; ++iCurRow) {
         for (int iCurColumn = 0; iCurColumn < iMapColumns_; ++iCurColumn) {
@@ -89,10 +94,7 @@ void Map::buildMap() {
                 iPlayerY_ = iCurRow;
             }
             if (cTile == '*') {
-                ++iBoxesOnGoals;
-            }
-            if (cTile == '.') {
-                ++iGoals;
+                ++iBoxesOnGoals_;
             }
         }
     }
@@ -140,6 +142,6 @@ void Map::ResetMap() {
     buildMap();
 }
 
-int Map::goals() const { return iGoals; }
+int Map::goals() const { return iGoals_; }
 
-int Map::boxesOnGoals() const { return iBoxesOnGoals; }
+int Map::boxesOnGoals() const { return iBoxesOnGoals_; }

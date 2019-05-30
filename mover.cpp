@@ -111,21 +111,22 @@ bool Mover::movePlayerFromGoal(Point posFrom, Point posTo) {
 
 bool Mover::movePlayerFromTo(Point posFrom, Point posTo) {
     Map::eTile tileFrom = getTile(posFrom);
+    bool bMoved = false;
     if (tileFrom == Map::eTile::PLAYER_ON_GOAL) {
-        movePlayerFromGoal(posFrom, posTo);
+        bMoved = movePlayerFromGoal(posFrom, posTo);
     } else if (tileFrom == Map::eTile::PLAYER) {
-        movePlayerFromFloor(posFrom, posTo);
+        bMoved = movePlayerFromFloor(posFrom, posTo);
     }
 
     map_->setMapString(sMap_);
     map_->buildMap();
-    return true;
+    return bMoved;
 }
 
 bool Mover::movePlayerUp() {
     Point posPlayer(map_->playerX(), map_->playerY());
     Point posAbovePlayer(posPlayer.x(), posPlayer.y() - 1);
-    movePlayerFromTo(posPlayer, posAbovePlayer);
+    return movePlayerFromTo(posPlayer, posAbovePlayer);
 }
 
 bool Mover::movePlayerDown() {

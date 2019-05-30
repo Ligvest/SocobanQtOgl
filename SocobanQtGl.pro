@@ -17,6 +17,7 @@ CONFIG += c++11
 
 SOURCES += \
         main.cpp \
+    movercountdecorator.cpp \
     socoban.cpp \
     appsettings.cpp \
     drawer.cpp \
@@ -29,6 +30,7 @@ SOURCES += \
     mover.cpp
 
 HEADERS += \
+    movercountdecorator.hpp \
     socoban.hpp \
     appsettings.hpp \
     drawer.hpp \

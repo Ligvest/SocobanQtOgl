@@ -88,8 +88,8 @@ class Map {
     float fFirstTileX_;
     float fFirstTileY_;
 
-    int iBoxesOnGoals;
-    int iGoals;
+    int iBoxesOnGoals_;
+    int iGoals_;
 
     std::string sMap_;
     std::string sInitialMap_;
