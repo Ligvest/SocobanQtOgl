@@ -16,7 +16,7 @@
 class AppSettings {
    public:
     /**
-     * @brief Enumeration for naming a sprites
+     * @brief Enumeration for naming sprites
      */
     enum class eTexture {
         PLAYER = 0,

@@ -163,6 +163,8 @@ void Socoban::drawMenuSelectLevel() {
 
     auto itemsToDisplay = selectLevelMenu_->rangeToDisplay();
 
+    QColor prevColor = Qt::white;
+
     for (auto item : itemsToDisplay) {
         if (item.first == selectLevelMenu_->curItem()) {
             qglColor(Qt::red);
@@ -175,6 +177,7 @@ void Socoban::drawMenuSelectLevel() {
         }
         fMenuItemY += fDistBtwnItems;
     }
+    qglColor(Qt::white);
 }
 
 void Socoban::drawPlayerStats() {}
