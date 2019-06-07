@@ -87,6 +87,9 @@ void Socoban::keyPressEvent(QKeyEvent* keyEvent) {
         case GameState::eState::SELECT_LEVEL:
             keyHandlerSelectLevelMenu(keyEvent->key());
             break;
+        case GameState::eState::WIN:
+            keyHandlerVictory(keyEvent->key());
+            break;
         case GameState::eState::EXIT:
             close();
             break;
@@ -99,6 +102,9 @@ void Socoban::processing() {
         case GameState::eState::MENU:
             break;
         case GameState::eState::PLAY:
+            if (selectLevelMenu_->curLevel().isComplete()) {
+                gameState_->setState(GameState::eState::WIN);
+            }
             break;
         case GameState::eState::PLAYER_STATS:
             break;
@@ -123,6 +129,9 @@ void Socoban::draw() {
             break;
         case GameState::eState::SELECT_LEVEL:
             drawMenuSelectLevel();
+            break;
+        case GameState::eState::WIN:
+            drawVictory();
             break;
         case GameState::eState::EXIT:
             break;
@@ -151,6 +160,24 @@ void Socoban::drawMenu() {
         }
         fMenuItemY += fDistBtwnItems;
     }
+}
+
+void Socoban::drawVictory() {
+    QFont menuItemFont("Sans", 25);
+    QFont menuItemFontSelected("Sanc", 30);
+
+    float fMenuItemX = settings_->screenWidth() / 2 - 300;
+    float fMenuItemY = settings_->screenHeight() / 2 - 50;
+    float fDistBtwnItems = 55.f;
+
+    auto itemsToDisplay = selectLevelMenu_->rangeToDisplay();
+
+    renderText(fMenuItemX, fMenuItemY, "Level is completed!",
+               menuItemFontSelected);
+    renderText(fMenuItemX, fMenuItemY + fDistBtwnItems,
+               "Enter to pass to next level", menuItemFont);
+    renderText(fMenuItemX, fMenuItemY + fDistBtwnItems * 2,
+               "R to restart the level", menuItemFont);
 }
 
 void Socoban::drawMenuSelectLevel() {
@@ -205,6 +232,32 @@ void Socoban::keyHandlerMainMenu(int iKey) {
     updateGL();
 }
 
+void Socoban::keyHandlerVictory(int iKey) {
+    switch (iKey) {
+        case Qt::Key_Down:
+        case Qt::Key_Up:
+            break;
+        case Qt::Key_R: {
+            Level& curLevel = selectLevelMenu_->curLevel();
+            curLevel.resetLevel();
+            gameState_->setState(GameState::eState::PLAY);
+            break;
+        }
+        case Qt::Key_Enter:
+        case Qt::Key_Return:
+            selectLevelMenu_->nextItem();
+            gameState_->setState(GameState::eState::PLAY);
+            break;
+        case Qt::Key_Escape:
+            gameState_->setState(GameState::eState::MENU);
+
+            break;
+        default:
+            break;
+    }
+    updateGL();
+}
+
 void Socoban::keyHandlerSelectLevelMenu(int iKey) {
     switch (iKey) {
         case Qt::Key_Down:
@@ -234,6 +287,7 @@ void Socoban::keyHandlerPlayerStatMenu(int iKey) {
             break;
         case Qt::Key_Enter:
         case Qt::Key_Return:
+            gameState_->setState(GameState::eState::WIN);
             break;
         case Qt::Key_Escape:
             gameState_->setState(GameState::eState::MENU);

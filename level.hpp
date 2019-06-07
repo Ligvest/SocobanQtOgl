@@ -29,6 +29,7 @@ class Level {
     int stepsPerformed() const;
     int goals() const;
     int boxesOnGoals() const;
+    void setBoxesOnGoals(int value);
     void resetLevel();
 
    private:

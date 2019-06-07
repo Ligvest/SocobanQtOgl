@@ -39,11 +39,13 @@ class Socoban : public QGLWidget {
     void drawMenuSelectLevel();
     void drawPlayerStats();
     void drawPlay();
+    void drawVictory();
 
     void keyHandlerMainMenu(int iKey);
     void keyHandlerSelectLevelMenu(int iKey);
     void keyHandlerPlayerStatMenu(int iKey);
     void keyHandlerPlay(int iKey);
+    void keyHandlerVictory(int iKey);
 
    private:
     SelectLevelMenu* selectLevelMenu_;
